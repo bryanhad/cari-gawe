@@ -235,7 +235,7 @@ const placeholderJobs = [
   },
   {
     title: "Software Engineer at Microsoft",
-    type: "Temporary",
+    type: "Internship",
     companyName: "Microsoft",
     locationType: "On-site",
     location: "Redmond, Washington, United States",
