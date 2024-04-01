@@ -4,10 +4,27 @@ import { Label } from "./ui/label";
 import Select from "./ui/select";
 import { jobTypes } from "@/lib/job-types";
 import { Button } from "./ui/button";
+import { jobFilterSchema } from "@/lib/validation";
+import { redirect } from "next/navigation";
 
 async function filterJobs(formData: FormData) {
     "use server";
-    console.log(formData.get('query') as string)
+
+    const formValues = Object.fromEntries(formData.entries());
+
+    const { location, query, remote, type } = jobFilterSchema.parse(formValues);
+
+    const searchParams = new URLSearchParams({
+        // the code below is to ensure to pass the object conditionally.. if the query is defined, then pass the object containing the trimmed query
+        ...(query && { query: query.trim() }),
+        ...(type && { type }),
+        ...(location && { location }),
+        ...(remote && { remote: "true" }),
+    });
+
+    // Below is what searchParams.toString() result into...
+    // "[fieldName]=[value]&[fieldName]=[value]&[fieldName]=[value]&...."
+    redirect(`/?${searchParams.toString()}`);
 }
 
 async function JobFilterSidebar() {
@@ -65,6 +82,7 @@ async function JobFilterSidebar() {
                             type="checkbox"
                             id="remote"
                             name="remote"
+                            value={"oh yes"}
                             className="scale-125 accent-black"
                         />
                         <Label htmlFor="rmeote">Remote Jobs</Label>
