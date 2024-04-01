@@ -6,9 +6,12 @@ import { jobTypes } from "@/lib/job-types";
 import { Button } from "./ui/button";
 import { JobFilterValues, jobFilterSchema } from "@/lib/validation";
 import { redirect } from "next/navigation";
+import FormSubmitButton from "./FormSubmitButton";
 
 async function filterJobs(formData: FormData) {
     "use server";
+
+    // await new Promise((res) => setTimeout(res, 2000));
 
     const formValues = Object.fromEntries(formData.entries());
 
@@ -103,9 +106,9 @@ async function JobFilterSidebar({
                         />
                         <Label htmlFor="rmeote">Remote Jobs</Label>
                     </div>
-                    <Button type="submit" className="w-full">
+                    <FormSubmitButton className="w-full">
                         Filter Jobs
-                    </Button>
+                    </FormSubmitButton>
                 </div>
             </form>
         </aside>
