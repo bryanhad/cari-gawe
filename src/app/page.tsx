@@ -31,7 +31,7 @@ function HomePage({
                 <p className="text-muted-foreground">Find your dream job.</p>
             </div>
             <section className="flex flex-col gap-4 md:flex-row">
-                <JobFilterSidebar />
+                <JobFilterSidebar defaultFilterValues={filterValues} />
                 <JobResults filterValues={filterValues}/>
             </section>
         </main>
