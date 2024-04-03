@@ -53,7 +53,9 @@ async function JobFilterSidebar({
     // h-fit is to set the height of the parent as high as the content! nice!
     return (
         <aside className="sticky top-0 h-fit rounded-lg border bg-background p-4 md:w-[260px]">
-            <form action={filterJobs}>
+            {/* I want to clear the state of this form if the defaultFilterValues is changed. I can do that with assigning the defaultFilterValues props that reflects the current filter to the form's key! */}
+            {/* if the key changed, React would throw away the old state! nice */}
+            <form action={filterJobs} key={JSON.stringify(defaultFilterValues)}>
                 <div className="space-y-4">
                     <div className="flex flex-col gap-2">
                         <Label htmlFor="query">Search</Label>
