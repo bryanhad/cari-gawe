@@ -19,7 +19,7 @@ const companyLogoSchema = z
         return !input || input.size < 1024 * 1024 * 2;
     }, "File must less than 2MB");
 
-const applicationSchema = z
+const applocationSchema = z
     .object({
         // the or(z.literal('')) is neccessary so that our schema will allow an empty string.
         // cuz if we only use .email().optional(), an empty string won't pass.
@@ -87,7 +87,7 @@ export const createJobSchema = z
             `Number can't be longer than 9 digits`,
         ),
     })
-    .and(applicationSchema)
+    .and(applocationSchema)
     .and(locationSchema);
 
 export type CreateJobValues = z.infer<typeof createJobSchema>;

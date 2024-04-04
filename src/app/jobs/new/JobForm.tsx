@@ -20,6 +20,7 @@ import { XIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import RichTextEditor from "@/components/RichTextEditor";
 import { draftToMarkdown } from "markdown-draft-js";
+import LoadingButton from "@/components/LoadingButton";
 
 function JobForm() {
     const form = useForm<CreateJobValues>({
@@ -44,7 +45,7 @@ function JobForm() {
 
     async function onSubmit(values: CreateJobValues) {
         // console.log("first");
-        // alert(JSON.stringify(values, null, 2));
+        alert(JSON.stringify(values, null, 2));
     }
 
     return (
@@ -135,13 +136,23 @@ function JobForm() {
                 <FormField
                     control={control}
                     name="locationType"
-                    render={({ field: { value, ...restOfFieldValues } }) => (
+                    render={({
+                        field: {
+                            value,
+                            onChange: fieldOnChange,
+                            ...restOfFieldValues
+                        },
+                    }) => (
                         <FormItem>
-                            <FormLabel>Location</FormLabel>
+                            <FormLabel>Location Type</FormLabel>
                             <FormControl>
                                 <Select
                                     {...restOfFieldValues}
                                     defaultValue={""}
+                                    onChange={(e) => {
+                                        fieldOnChange(e);
+                                        trigger("location");
+                                    }}
                                 >
                                     <option value={""} hidden>
                                         Select location type
@@ -176,7 +187,7 @@ function JobForm() {
                                 />
                             </FormControl>
                             {watch("location") && (
-                                <div className="flex items-center gap-1">
+                                <div className="flex max-w-max items-center gap-1 rounded-md border p-2">
                                     <button
                                         type="button"
                                         onClick={() =>
@@ -275,7 +286,22 @@ function JobForm() {
                         </FormItem>
                     )}
                 />
-                <Button type="submit">owyeah</Button>
+                <FormField
+                    control={control}
+                    name="salary"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Salary</FormLabel>
+                            <FormControl>
+                                <Input {...field} type="number" />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <LoadingButton type="submit" loading={isSubmitting}>
+                    Submit Job
+                </LoadingButton>
             </form>
         </Form>
     );
