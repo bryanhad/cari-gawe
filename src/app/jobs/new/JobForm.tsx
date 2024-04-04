@@ -16,6 +16,8 @@ import Select from "@/components/ui/select";
 import { jobTypes, locationTypes } from "@/lib/job-types";
 import { Button } from "@/components/ui/button";
 import LocationInput from "@/components/LocationInput";
+import { XIcon } from "lucide-react";
+import { Label } from "@/components/ui/label";
 
 function JobForm() {
     const form = useForm<CreateJobValues>({
@@ -164,16 +166,84 @@ function JobForm() {
                             <FormLabel>Office Location</FormLabel>
                             <FormControl>
                                 <LocationInput
+                                    // here, we handle the onChange of our react-hook-form our self, so that the onChange would be called when the onLocationSelected is called in our custom LocationInput compoennt
                                     ref={field.ref}
                                     onLocationSelected={(location) =>
                                         field.onChange(location)
                                     }
                                 />
                             </FormControl>
+                            {watch("location") && (
+                                <div className="flex items-center gap-1">
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setValue("location", "", {
+                                                shouldValidate: true,
+                                            })
+                                        }
+                                    >
+                                        <XIcon size={20} />
+                                    </button>
+                                    <span className="text-sm">
+                                        {watch("location")}
+                                    </span>
+                                </div>
+                            )}
                             <FormMessage />
                         </FormItem>
                     )}
                 />
+                <div className="space-y-2">
+                    <Label htmlFor="applicationEmail">How to apply</Label>
+                    <div className="flex justify-between">
+                        <FormField
+                            control={control}
+                            name="applicationEmail"
+                            render={({ field }) => {
+                                return (
+                                    <FormItem className="grow">
+                                        <FormControl>
+                                            <div className="flex items-center">
+                                                <Input
+                                                    id="applicationEmail"
+                                                    placeholder="Email"
+                                                    type="email"
+                                                    {...field}
+                                                />
+                                                <span className="mx-2">or </span>
+                                            </div>
+                                        </FormControl>
+                                        <FormMessage/>
+                                    </FormItem>
+                                );
+                            }}
+                        />
+                        <FormField
+                            control={control}
+                            name="applicationUrl"
+                            render={({ field }) => {
+                                return (
+                                    <FormItem className="grow">
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Website url"
+                                                type="url"
+                                                {...field}
+                                                onChange={(e) => {
+                                                    field.onChange(e)
+                                                    // trigger is one of the method that our form from ReactHookForm gave us
+                                                    trigger('applicationEmail')
+                                                }}
+                                            />
+                                        </FormControl>
+                                        <FormMessage/>
+                                    </FormItem>
+                                );
+                            }}
+                        />
+                    </div>
+                </div>
                 <Button type="submit">owyeah</Button>
             </form>
         </Form>
