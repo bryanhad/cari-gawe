@@ -18,6 +18,8 @@ import { Button } from "@/components/ui/button";
 import LocationInput from "@/components/LocationInput";
 import { XIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import RichTextEditor from "@/components/RichTextEditor";
+import { draftToMarkdown } from "markdown-draft-js";
 
 function JobForm() {
     const form = useForm<CreateJobValues>({
@@ -211,10 +213,12 @@ function JobForm() {
                                                     type="email"
                                                     {...field}
                                                 />
-                                                <span className="mx-2">or </span>
+                                                <span className="mx-2">
+                                                    or{" "}
+                                                </span>
                                             </div>
                                         </FormControl>
-                                        <FormMessage/>
+                                        <FormMessage />
                                     </FormItem>
                                 );
                             }}
@@ -231,19 +235,46 @@ function JobForm() {
                                                 type="url"
                                                 {...field}
                                                 onChange={(e) => {
-                                                    field.onChange(e)
+                                                    field.onChange(e);
                                                     // trigger is one of the method that our form from ReactHookForm gave us
-                                                    trigger('applicationEmail')
+                                                    trigger("applicationEmail");
                                                 }}
                                             />
                                         </FormControl>
-                                        <FormMessage/>
+                                        <FormMessage />
                                     </FormItem>
                                 );
                             }}
                         />
                     </div>
                 </div>
+                <FormField
+                    control={control}
+                    name="description"
+                    render={({ field }) => (
+                        <FormItem>
+                            <Label
+                                // The Editor from wysiwyg doesn't support the ID attribute, so we have to do some workaround to achieve focus on label click.. with this onclick trick!
+                                onClick={() => {
+                                    // this setFocus also uses the ref that we pass to the component below! so it is important to pass a the field.ref if you want react-hook-form to work properly.
+                                    setFocus("description");
+                                }}
+                            >
+                                Description
+                            </Label>
+                            <FormControl>
+                                <RichTextEditor
+                                    onChange={(draft) =>
+                                        field.onChange(draftToMarkdown(draft))
+                                    }
+                                    // note: ref is neccessary in using react-hook-form, so that whenever ther's a validation error, react-hook-form can automatically focus on that input!
+                                    ref={field.ref}
+                                />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
                 <Button type="submit">owyeah</Button>
             </form>
         </Form>
