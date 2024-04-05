@@ -18,3 +18,12 @@ export function getRelativeDate(from: Date) {
         addSuffix: true,
     });
 }
+
+export function toSlug(str: string) {
+    return str
+        .toLowerCase()
+        .replace(/ /g, "-")
+        .replace(/[^\w-]+/g, ""); 
+        // the first regex replace all spaces into -
+        // the second regex replaces all - that is more than 1 to be an empty string 
+}
